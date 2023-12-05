@@ -1,6 +1,6 @@
 const express = require("express");
-const bannersCollection = require("../models/banners");
 const router = express.Router();
+const bannersCollection = require("../models/banners");
 
 router.get("/", async (req, res) => {
   const result = await bannersCollection.find().toArray();

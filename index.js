@@ -1,35 +1,43 @@
+// Importing required modules and setting up Express
 const express = require("express");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 
-// middleware
+// Middleware setup
 app.use(cors());
 app.use(express.json());
 
-// collections
-const {connectMongoDB} = require("./connection");
+// Connecting to MongoDB using the connectMongoDB function from connection.js
+const { connectMongoDB } = require("./connection");
 
+// Importing route handlers for different collections
 const bannersCollection = require("./routes/banners");
 const menusRouter = require("./routes/menus");
 const reviewsCollection = require("./routes/reviews");
 const orderOnlineCollection = require("./routes/orderOnline");
+const cartsCollection = require("./routes/carts");
 
+// Connecting to MongoDB and setting up routes
 connectMongoDB()
   .then((client) => {
-    // Routes
-    // get Banners for Landing page
+    // Routes setup
+    // Endpoint to get Banners for Landing page
     app.use("/banners", bannersCollection);
 
-    // get all menus
+    // Endpoint to get all menus
     app.use("/menus", menusRouter);
 
-    // get reviews data
+    // Endpoint to get reviews data
     app.use("/reviews", reviewsCollection);
 
-    // get orders-online landing page sections data
+    // Endpoint to get orders-online landing page sections data
     app.use("/orders-online", orderOnlineCollection);
+
+    // Endpoint to get all carts
+    app.use("/carts", cartsCollection);
+
     // Send a ping to confirm a successful connection
     client.db("admin").command({ ping: 1 });
     console.log(
@@ -40,10 +48,12 @@ connectMongoDB()
     console.error("Error: " + err.message);
   });
 
+// Default endpoint
 app.get("/", (req, res) => {
   res.send("Boss is running");
 });
 
+// Starting the Express server
 app.listen(port, () => {
   console.log(`Bistro Boss is listening on ${port}`);
 });
