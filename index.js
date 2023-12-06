@@ -18,6 +18,7 @@ const menusRouter = require("./routes/menus");
 const reviewsCollection = require("./routes/reviews");
 const orderOnlineCollection = require("./routes/orderOnline");
 const cartsCollection = require("./routes/carts");
+const usersCollection = require("./routes/users");
 
 // Connecting to MongoDB and setting up routes
 connectMongoDB()
@@ -37,6 +38,9 @@ connectMongoDB()
 
     // Endpoint to get all carts
     app.use("/carts", cartsCollection);
+
+    // post users details
+    app.use("/users", usersCollection);
 
     // Send a ping to confirm a successful connection
     client.db("admin").command({ ping: 1 });

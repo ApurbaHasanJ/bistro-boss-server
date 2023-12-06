@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const cartsCollection = require("../models/carts");
 
 const handleGetUserCarts = async (req, res) => {
@@ -16,8 +17,17 @@ const handlePostUserCarts = async (req, res) => {
   const result = await cartsCollection.insertOne(item);
   res.send(result);
 };
+ 
+const handleDeleteItem = async (req, res) => {
+  const id = req.params.id;
+  // console.log(id);
+  const query = {_id: new ObjectId(id)}
+  const result = await cartsCollection.deleteOne(query);
+  res.send(result);
+}
 
 module.exports = {
   handleGetUserCarts,
   handlePostUserCarts,
+  handleDeleteItem
 };

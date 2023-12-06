@@ -1,6 +1,3 @@
-const express = require("express");
-const router = express.Router();
-
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@believer.igrxpib.mongodb.net/?retryWrites=true&w=majority`;
@@ -26,7 +23,6 @@ const connectMongoDB = async () => {
 };
 
 module.exports = {
-  router,
   client,
   connectMongoDB,
 };
