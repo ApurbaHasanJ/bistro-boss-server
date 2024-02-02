@@ -13,6 +13,8 @@
     "cors": "^1.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "mongodb": "^5.5.0"
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^5.5.0",
+    "stripe": "^14.14.0"
   }
 }

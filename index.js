@@ -19,6 +19,8 @@ const reviewsCollection = require("./routes/reviews");
 const orderOnlineCollection = require("./routes/orderOnline");
 const cartsCollection = require("./routes/carts");
 const usersCollection = require("./routes/users");
+const reservationCollection = require("./routes/reservation");
+const stripeAPI = require("./routes/stripe");
 
 // Connecting to MongoDB and setting up routes
 connectMongoDB()
@@ -38,6 +40,12 @@ connectMongoDB()
 
     // Endpoint to get all carts
     app.use("/carts", cartsCollection);
+
+    // stripe payment routers
+    app.use("/api/create-checkout-session", stripeAPI);
+
+    // EndPoint to get and post reservations data
+    app.use("/reservations", reservationCollection);
 
     // post users details
     app.use("/users", usersCollection);
