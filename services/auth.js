@@ -2,34 +2,37 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const usersCollection = require("../models/users");
+require("dotenv").config();
 
 // jwt setup
 router.post("/", (req, res) => {
   const user = req.body;
   const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "23h",
   });
   res.send({ token });
 });
 
 // jwt verification middleware
 const verifyJWT = (req, res, next) => {
+  console.log(req.headers);
   // skip verification routes
   const excludedRoutes = ["/dashboard/add-review"];
 
   const authorization = req.headers.authorization;
+  console.log("Authorization Header:", authorization);
   const currentRoute = req.path;
-
-  // proceed next if routes doesn't contain security
-  if (excludedRoutes.includes(currentRoute)) {
-    return next();
-  }
 
   // if not authorized
   if (!authorization) {
     return res
       .status(401)
       .send({ error: true, message: "Invalid authorization" });
+  }
+  
+  // proceed next if routes doesn't contain security
+  if (excludedRoutes.includes(currentRoute)) {
+    return next();
   }
 
   // bearer token

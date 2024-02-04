@@ -1,10 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const orderOnlineCollection = require("../models/orderOnline");
+const { handleOrderOnline } = require("../controllers/orderOnline");
+const { verifyJWT } = require("../services/auth");
 
-router.get("/", async (req, res) => {
-  const result = await orderOnlineCollection.find().toArray();
-  res.send(result);
-});
+router.get("/", handleOrderOnline)
 
 module.exports = router;

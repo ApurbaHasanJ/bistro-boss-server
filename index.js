@@ -6,13 +6,20 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 
 // Middleware setup
-app.use(cors());
+const corsOptions = {
+  origin: ["http://localhost:5173"],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Connecting to MongoDB using the connectMongoDB function from connection.js
 const { connectMongoDB } = require("./connection");
 
 // Importing route handlers for different collections
+const { authRouter } = require("./services/auth");
 const bannersCollection = require("./routes/banners");
 const menusRouter = require("./routes/menus");
 const reviewsCollection = require("./routes/reviews");
@@ -21,11 +28,16 @@ const cartsCollection = require("./routes/carts");
 const usersCollection = require("./routes/users");
 const reservationCollection = require("./routes/reservation");
 const stripeAPI = require("./routes/stripe");
+const payHistoryCollection = require("./routes/payHistory");
 
 // Connecting to MongoDB and setting up routes
 connectMongoDB()
   .then((client) => {
     // Routes setup
+
+    // Use the authentication router
+    app.use("/jwt", authRouter);
+
     // Endpoint to get Banners for Landing page
     app.use("/banners", bannersCollection);
 
@@ -40,6 +52,9 @@ connectMongoDB()
 
     // Endpoint to get all carts
     app.use("/carts", cartsCollection);
+
+    // pay history
+    app.use('/pay-history', payHistoryCollection)
 
     // stripe payment routers
     app.use("/api/create-checkout-session", stripeAPI);
