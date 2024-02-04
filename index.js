@@ -60,7 +60,7 @@ connectMongoDB()
     app.use("/api/create-checkout-session", stripeAPI);
 
     // EndPoint to get and post reservations data
-    app.use("/reservations", reservationCollection);
+    app.use("/reservation", reservationCollection);
 
     // post users details
     app.use("/users", usersCollection);
