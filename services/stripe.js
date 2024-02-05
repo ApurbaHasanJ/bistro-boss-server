@@ -4,7 +4,6 @@ const stripe = require("stripe")(
 const express = require("express");
 const payHistoryCollection = require("../models/payHistory");
 const cartsCollection = require("../models/carts");
-const { ObjectId } = require("mongodb");
 const app = express();
 app.use(express.static("public"));
 
@@ -47,17 +46,18 @@ const handleStripeAPI = async (req, res) => {
   const session = await stripe.checkout.sessions.create({
     // add payment method type
     payment_method_types: ["card"],
-
     line_items: menuItems,
     mode: "payment",
     success_url: `http://localhost:5173/payment-success`,
     cancel_url: `http://localhost:5173/payment-error`,
   });
 
-  //   post order if payment is successful
+  // Post order if payment is successful
   await payHistoryCollection.insertOne(orderHistory);
+
+  // Delete cart items
   const filter = { userEmail: userEmail };
-  await cartsCollection.deleteMany(filter)
+  await cartsCollection.deleteMany(filter);
 
   res.json({ id: session.id });
 };

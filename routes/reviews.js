@@ -1,10 +1,7 @@
 const express = require("express");
+const { handlePostUserReview } = require("../controllers/reviews");
 const router = express.Router();
-const reviewsCollection = require("../models/reviews");
 
-router.get("/", async (req, res) => {
-  const result = await reviewsCollection.find().toArray();
-  res.send(result);
-});
+router.post("/", handlePostUserReview);
 
 module.exports = router;
