@@ -1,6 +1,6 @@
 const orderOnlineCollection = require("../models/orderOnline");
 
-const handleOrderOnline = async (req, res) => {
+const handleGetOrders = async (req, res) => {
   try {
     // Sorting by createdAt field in descending order (latest orders first)
     const result = await orderOnlineCollection.find().toArray();
@@ -11,6 +11,8 @@ const handleOrderOnline = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
-  handleOrderOnline,
+  handleGetOrders,
 };

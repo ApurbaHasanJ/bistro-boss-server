@@ -17,7 +17,7 @@ const handleAdminGetOrder = async (req, res) => {
 const handleGetPayHistory = async (req, res) => {
   try {
     const email = req.params.email;
-    console.log(email);
+    // console.log(email);
 
     const result = await payHistoryCollection.find({ userEmail: email }).toArray();
 
@@ -36,4 +36,5 @@ const handleGetPayHistory = async (req, res) => {
 
 module.exports = {
   handleGetPayHistory,
+  handleAdminGetOrder
 };

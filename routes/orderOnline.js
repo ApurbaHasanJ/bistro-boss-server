@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { handleOrderOnline } = require("../controllers/orderOnline");
+const { handleGetOrders } = require("../controllers/orderOnline");
 const { verifyJWT } = require("../services/auth");
 
-router.get("/", handleOrderOnline)
+router.get("/", handleGetOrders)
 
 module.exports = router;
