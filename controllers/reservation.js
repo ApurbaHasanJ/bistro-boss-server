@@ -1,5 +1,6 @@
 const moment = require("moment");
 const reservationCollection = require("../models/reservation");
+const { ObjectId } = require("mongodb");
 
 // post user reservation
 const handlePostReservation = async (req, res) => {
@@ -27,7 +28,7 @@ const handleGetUserReservations = async (req, res) => {
     const userEmail = req.params.email;
     // console.log(userEmail);
 
-    const filter = { email: userEmail }; 
+    const filter = { email: userEmail };
     const result = await reservationCollection.find(filter).toArray();
     console.log(result);
     res.send(result);
@@ -36,7 +37,44 @@ const handleGetUserReservations = async (req, res) => {
   }
 };
 
+// get all reservation by admin
+const handleGetAllReservations = async (req, res) => {
+  const result = await reservationCollection.find().toArray();
+  res.send(result);
+};
+
+const handleUpdateReservationActivity = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const filter = { _id: new ObjectId(id) };
+    const reservation = await reservationCollection.findOne(filter);
+
+    if (!reservation) {
+      return res.status(404).json({ error: "Reservation not found" });
+    }
+
+    let updatedActivity;
+    if (!reservation.activity || reservation.activity === "pending") {
+      updatedActivity = "completed";
+    } else if (reservation.activity === "completed") {
+      updatedActivity = "pending";
+    }
+
+    const result = await reservationCollection.updateOne(filter, {
+      $set: { activity: updatedActivity },
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error("Error updating reservation activity:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 module.exports = {
   handlePostReservation,
   handleGetUserReservations,
+  handleGetAllReservations,
+  handleUpdateReservationActivity,
 };
