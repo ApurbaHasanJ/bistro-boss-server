@@ -4,8 +4,15 @@ const usersCollection = require("../models/users");
 // handle post user data if it not exists
 const handlePostUsers = async (req, res) => {
   const user = req.body;
-  const result = await usersCollection.insertOne(user);
-  res.send(result);
+  console.log(user);
+  const filter = { email: user.email };
+  const findUser = await usersCollection.findOne(filter);
+  if (!findUser) {
+    const result = await usersCollection.insertOne(user);
+    res.send(result);
+  } else {
+    res.status(200).send({ message: "email already exists" });
+  }
 };
 
 // get admin from users collection
