@@ -1,11 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const menusCollection = require("../models/menus");
+const {
+  handleGetAllMenus,
+  handlePostMenu,
+  handleDeleteMenu,
+  handleUpdateMenu,
+} = require("../controllers/menus");
 
 // get menus data
-router.get("/", async (req, res) => {
-  const result = await menusCollection.find().toArray();
-  res.send(result);
-});
+router.get("/", handleGetAllMenus);
+router.post("/admin", handlePostMenu);
+router.route("/admin/:id").delete(handleDeleteMenu).patch(handleUpdateMenu);
 
 module.exports = router;
