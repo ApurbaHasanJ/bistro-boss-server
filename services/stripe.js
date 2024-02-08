@@ -17,17 +17,20 @@ const handleStripeAPI = async (req, res) => {
 
   // Extract all menuId values
   const allMenuIds = items.map((item) => item.menuId);
-  const allPrices = items.map((item) => item.price);
+  const allPrices = items.map((item) => parseFloat(item.price));
 
   // Calculate the sum of all prices
   const totalPrice = allPrices.reduce((acc, price) => acc + price, 0);
+
+  // Round the total price to two decimal places and parse it to a float
+  const formattedTotalPrice = parseFloat(totalPrice.toFixed(2));
 
   // Create the orderHistory object
   const orderHistory = {
     userName: userName,
     userEmail: userEmail,
     menuIds: allMenuIds,
-    totalPrice,
+    totalPrice: formattedTotalPrice,
     createdAt: new Date(),
   };
 
