@@ -14,7 +14,15 @@ const handleGetUserReview = async (req, res) => {
   res.send(result);
 };
 
+
+// get all reviews
+const handleGetAllReviews = async (req, res) => {
+  const result = await reviewCollection.find().toArray();
+  res.send(result);
+}
+
 module.exports = {
   handlePostUserReview,
-  handleGetUserReview
+  handleGetUserReview,
+  handleGetAllReviews
 };
