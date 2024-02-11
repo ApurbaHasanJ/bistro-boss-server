@@ -5,9 +5,10 @@ const {
   handlePostUserCarts,
   handleDeleteItem,
 } = require("../controllers/carts");
+const { verifyJWT, verifyAdmin } = require("../services/auth");
 
 router.route("/").get(handleGetUserCarts).post(handlePostUserCarts);
 
-router.delete("/:id", handleDeleteItem);
+router.delete("/:id",verifyJWT,verifyAdmin, handleDeleteItem);
 
 module.exports = router;

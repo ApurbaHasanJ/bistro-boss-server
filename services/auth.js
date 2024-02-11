@@ -15,7 +15,7 @@ router.post("/", (req, res) => {
 
 // jwt verification middleware
 const verifyJWT = (req, res, next) => {
-  console.log(req.headers);
+  // console.log(req.headers);
   // skip verification routes
   const excludedRoutes = ["/dashboard/add-review"];
 
@@ -23,32 +23,33 @@ const verifyJWT = (req, res, next) => {
   console.log("Authorization Header:", authorization);
   const currentRoute = req.path;
 
+  // proceed next if routes doesn't contain security
+  if (excludedRoutes.includes(currentRoute)) {
+    return next();
+  }
+
   // if not authorized
   if (!authorization) {
     return res
       .status(401)
       .send({ error: true, message: "Invalid authorization" });
   }
-  
-  // proceed next if routes doesn't contain security
-  if (excludedRoutes.includes(currentRoute)) {
-    return next();
-  }
 
   // bearer token
   const token = authorization.split(" ")[1];
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    console.log("decoded", decoded);
     if (err) {
       return res.status(500).send({ error: true, message: err.message });
     }
-    res.decoded = decoded;
+    req.decoded = decoded;
     next();
   });
 };
 
 // verify admin middleware
 const verifyAdmin = async (req, res, next) => {
-  const email = req.body.email;
+  const email = req.decoded.email;
   query = { email: email };
   const user = await usersCollection.findOne(query);
   if (user?.role !== "admin") {

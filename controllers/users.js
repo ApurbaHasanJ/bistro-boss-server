@@ -4,7 +4,7 @@ const usersCollection = require("../models/users");
 // handle post user data if it not exists
 const handlePostUsers = async (req, res) => {
   const user = req.body;
-  console.log(user);
+  // console.log(user);
   const filter = { email: user.email };
   const findUser = await usersCollection.findOne(filter);
   if (!findUser) {
@@ -19,22 +19,39 @@ const handlePostUsers = async (req, res) => {
 const handleGetAdmin = async (req, res) => {
   const email = req.params.email;
 
-  if (req.decoded.email !== email) {
-    res.send({ admin: false });
-    return;
+  try {
+    if (req.decoded.email !== email) {
+      res.send({ admin: false });
+    } else {
+      const query = { email: email };
+      const user = await usersCollection.findOne(query);
+      if (!user) {
+        res.status(404).send({ message: "User not found" });
+        return;
+      }
+      const result = { admin: user.role === "admin" };
+      console.log("isAdmin", result);
+      res.send(result);
+    }
+  } catch (error) {
+    console.error("Error in handleGetAdmin:", error);
+    res.status(500).send({ message: "Internal server error" });
   }
-
-  const query = { email: email };
-  const user = await usersCollection.findOne(query);
-  const result = { admin: user?.role === "admin" };
-  res.send(result);
 };
+
+
 
 // get all users from
 const handleGetAllUsers = async (req, res) => {
-  const user = await usersCollection.find().toArray();
-  res.send(user);
+  try {
+    const users = await usersCollection.find().sort({ "metadata.createdAt": -1 }).toArray();
+    res.send(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).send("Internal Server Error");
+  }
 };
+
 
 // update user role
 const handleUpdateUserRole = async (req, res) => {

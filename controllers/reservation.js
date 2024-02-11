@@ -39,7 +39,10 @@ const handleGetUserReservations = async (req, res) => {
 
 // get all reservation by admin
 const handleGetAllReservations = async (req, res) => {
-  const result = await reservationCollection.find().toArray();
+  const result = await reservationCollection
+    .find()
+    .sort({ date: -1 })
+    .toArray();
   res.send(result);
 };
 
@@ -70,7 +73,6 @@ const handleUpdateReservationActivity = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 module.exports = {
   handlePostReservation,

@@ -7,11 +7,14 @@ const {
   handleUpdateUserRole,
   handleDeleteUser,
 } = require("../controllers/users");
-const { verifyJWT } = require("../services/auth");
+const { verifyJWT, verifyAdmin } = require("../services/auth");
 
 router.post("/", handlePostUsers);
-router.get("/admin", handleGetAllUsers);
-router.route("/admin/:id").patch(handleUpdateUserRole).delete(handleDeleteUser);
+router.get("/admin", verifyJWT, verifyAdmin, handleGetAllUsers);
+router
+  .route("/admin/:id", verifyJWT, verifyAdmin)
+  .patch(handleUpdateUserRole)
+  .delete(handleDeleteUser);
 router.get("/admin/:email", verifyJWT, handleGetAdmin);
 
 module.exports = router;

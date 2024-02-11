@@ -10,7 +10,7 @@ const handleAdminGetOrder = async (req, res) => {
       .toArray();
     res.send(result);
   } catch (error) {
-    console.error("Error in handleGetOrder:", error);
+    // console.error("Error in handleGetOrder:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -76,7 +76,7 @@ const handleAdminGetOrderStats = async (req, res) => {
     ];
 
     const result = await payHistoryCollection.aggregate(pipeline).toArray();
-    console.log("order price with category", result);
+    // console.log("order price with category", result);
     res.send(result);
   } catch (error) {
     console.error("Error fetching order stats:", error);
