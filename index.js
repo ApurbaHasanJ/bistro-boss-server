@@ -13,7 +13,7 @@ const corsOptions = {
   credentials: true,
 };
 
-// "https://bistro-boss-303c5.web.app"
+// "http://localhost:5173"
 
 app.use(cors(corsOptions));
 app.use(express.json());
