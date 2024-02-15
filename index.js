@@ -1,16 +1,19 @@
 // Importing required modules and setting up Express
 const express = require("express");
-const app = express();
 const cors = require("cors");
 require("dotenv").config();
+
+const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware setup
 const corsOptions = {
-  origin: ["http://localhost:5173"],
+  origin: ["https://bistro-boss-303c5.web.app"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
+
+// "https://bistro-boss-303c5.web.app"
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -54,7 +57,7 @@ connectMongoDB()
     app.use("/carts", cartsCollection);
 
     // pay history
-    app.use('/pay-history', payHistoryCollection)
+    app.use("/pay-history", payHistoryCollection);
 
     // stripe payment routers
     app.use("/api/create-checkout-session", stripeAPI);

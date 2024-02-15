@@ -1,6 +1,4 @@
-const stripe = require("stripe")(
-  "sk_test_51OewvnFpHUUs9w8UE8KihRF261XmMHjjKtFImjzZMXrgbPK6gSghJXdUhF1x3zRAWO62CgU6B223NLFm9uUh9NVU00cf6y6xTQ"
-);
+const stripe = require("stripe")(`${process.env.PAYMENT_SECRET_KEY}`);
 const express = require("express");
 const payHistoryCollection = require("../models/payHistory");
 const cartsCollection = require("../models/carts");
@@ -51,8 +49,8 @@ const handleStripeAPI = async (req, res) => {
     payment_method_types: ["card"],
     line_items: menuItems,
     mode: "payment",
-    success_url: `http://localhost:5173/payment-success`,
-    cancel_url: `http://localhost:5173/payment-error`,
+    success_url: `https://bistro-boss-303c5.web.app/payment-success`,
+    cancel_url: `https://bistro-boss-303c5.web.app/payment-error`,
   });
 
   // Post order if payment is successful
